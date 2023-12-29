@@ -48,7 +48,7 @@ function createWindow() {
   mainWindow.webContents.on('did-finish-load', () => {
     const appVersion = app.getVersion()
     mainWindow.webContents.send('updateMessage', {
-      message: 'hello from Electron',
+      message: 'Checking for updates',
       version: appVersion
     })
   })
