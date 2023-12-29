@@ -36,8 +36,8 @@ function createWindow() {
   autoUpdater.setFeedURL({
     provider: 'github',
     owner: 'jimweldev',
-    repo: 'jimweldev/autoupdate',
-    token: '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'
+    repo: 'autoupdate'
+    // token: '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'
   })
 
   // AutoUpdater Configuration
@@ -65,6 +65,14 @@ function createWindow() {
     // Handle no update available
     mainWindow.webContents.send('updateMessage', {
       message: 'No update available.',
+      version: app.getVersion()
+    })
+  })
+
+  autoUpdater.on('download-progress', (progressObj) => {
+    const message = `Download speed: ${progressObj.bytesPerSecond} - Downloaded ${progressObj.percent}% (${progressObj.transferred}/${progressObj.total})`
+    mainWindow.webContents.send('updateMessage', {
+      message,
       version: app.getVersion()
     })
   })
