@@ -30,7 +30,6 @@ function createWindow() {
     mainWindow.loadURL(process.env['ELECTRON_RENDERER_URL'])
   } else {
     mainWindow.loadFile(join(__dirname, '../renderer/index.html'))
-    autoUpdater.checkForUpdatesAndNotify()
   }
 
   autoUpdater.setFeedURL({
@@ -42,7 +41,8 @@ function createWindow() {
 
   // AutoUpdater Configuration
   autoUpdater.autoDownload = false // Do not automatically download updates
-  autoUpdater.checkForUpdates() // Check for updates on app start
+  // autoUpdater.checkForUpdates() // Check for updates on app start
+  autoUpdater.checkForUpdatesAndNotify()
 
   // SEND THE MESSAGE TO REACT JS
   mainWindow.webContents.on('did-finish-load', () => {
@@ -54,6 +54,9 @@ function createWindow() {
   })
 
   autoUpdater.on('update-available', () => {
+    // Start downloading the update
+    autoUpdater.downloadUpdate()
+
     // Handle update available
     mainWindow.webContents.send('updateMessage', {
       message: 'Update available. Downloading...',
@@ -97,43 +100,6 @@ app.whenReady().then(() => {
   app.on('browser-window-created', (_, window) => {
     optimizer.watchWindowShortcuts(window)
   })
-
-  // mainWindow.webContents.send('updateMessage', {
-  //   message: 'updated',
-  //   version: appVersion
-  // })
-
-  // autoUpdater.on('update-available', () => {
-  //   mainWindow.webContents.send('updateMessage', {
-  //     message: 'Update available. Downloading...',
-  //     version: app.getVersion()
-  //   })
-  // })
-
-  // autoUpdater.on('update-not-available', () => {
-  //   mainWindow.webContents.send('updateMessage', {
-  //     message: 'No update available.',
-  //     version: app.getVersion()
-  //   })
-  // })
-
-  // autoUpdater.on('download-progress', (progressObj) => {
-  //   const message = `Download speed: ${progressObj.bytesPerSecond} - Downloaded ${progressObj.percent}% (${progressObj.transferred}/${progressObj.total})`
-  //   mainWindow.webContents.send('updateMessage', {
-  //     message,
-  //     version: app.getVersion()
-  //   })
-  // })
-
-  // autoUpdater.on('update-downloaded', () => {
-  //   mainWindow.webContents.send('updateMessage', {
-  //     message: 'Update downloaded. Restarting...',
-  //     version: app.getVersion()
-  //   })
-
-  //   // Automatically restart the app to apply the update
-  //   autoUpdater.quitAndInstall()
-  // })
 
   createWindow()
 
