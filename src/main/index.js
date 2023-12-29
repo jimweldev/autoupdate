@@ -73,7 +73,11 @@ function createWindow() {
   })
 
   autoUpdater.on('download-progress', (progressObj) => {
-    const message = `Download speed: ${progressObj.bytesPerSecond} - Downloaded ${progressObj.percent}% (${progressObj.transferred}/${progressObj.total})`
+    const message = `Download speed: ${
+      progressObj.bytesPerSecond
+    } - Downloaded ${progressObj.percent.toFixed(0)}% (${progressObj.transferred}/${
+      progressObj.total
+    })`
     mainWindow.webContents.send('updateMessage', {
       message,
       version: app.getVersion()
