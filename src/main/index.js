@@ -5,11 +5,9 @@ import { autoUpdater } from 'electron-updater'
 import icon from '../../resources/icon.png?asset'
 
 function createWindow() {
-  // Define the shared installation path
-  const installPath = join('C:', 'ProgramData', 'Test')
-
-  // Set the installation path in the app's configuration
-  app.setPath('userData', installPath)
+  const userHome = app.getPath('home') // Get the user's home directory
+  const installPath = join(userHome, 'Test') // Set the installation path
+  app.setPath('userData', installPath) // Set the installation path in the app's configuration
 
   const mainWindow = new BrowserWindow({
     width: 900,
